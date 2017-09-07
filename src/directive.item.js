@@ -20,13 +20,13 @@
 	 * @param $parse
 	 * @param GridsterDraggable
 	 * @param GridsterResizable
-	 * @param gridsterDebounce
+	 * @param GridsterDebounce
 	 */
-	return ['$parse', 'GridsterDraggable', 'GridsterResizable', 'gridsterDebounce', function($parse, GridsterDraggable, GridsterResizable, gridsterDebounce) {
+	return ['$parse', 'GridsterDraggable', 'GridsterResizable', 'GridsterDebounce', function($parse, GridsterDraggable, GridsterResizable, GridsterDebounce) {
 		return {
 			scope: true,
 			restrict: 'EA',
-			controller: 'GridsterItemCtrl',
+			controller: 'GridsterItemController',
 			controllerAs: 'gridsterItem',
 			require: ['^gridster', 'gridsterItem'],
 			link: function(scope, $el, attrs, controllers) {
@@ -186,7 +186,7 @@
 					}
 				}
 
-				var debouncedTransitionEndPublisher = gridsterDebounce(function() {
+				var debouncedTransitionEndPublisher = GridsterDebounce(function() {
 					scope.$apply(function() {
 						scope.$broadcast('gridster-item-transition-end', item);
 					});

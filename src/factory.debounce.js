@@ -16,7 +16,7 @@
 	'use strict';
 
 	return function() {
-		return function gridsterDebounce(func, wait, immediate) {
+		return function GridsterDebounce(func, wait, immediate) {
 			var timeout;
 			return function() {
 				var context = this,

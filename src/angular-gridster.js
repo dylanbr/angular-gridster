@@ -20,10 +20,10 @@
 	// This returned angular module 'gridster' is what is exported.
 	return angular.module('gridster', [])
 
-	.constant('gridsterConfig', require("./config.js"))
+	.constant('GridsterConfig', require("./config.js"))
 
-	.controller('GridsterCtrl', require("./controller.js"))
-	.controller('GridsterItemCtrl', require("./controller.item.js"))
+	.controller('GridsterController', require("./controller.js"))
+	.controller('GridsterItemController', require("./controller.item.js"))
 
 	.directive('gridster', require("./directive.js"))
 	.directive('gridsterItem', require("./directive.item.js"))
@@ -33,7 +33,7 @@
 	.factory('GridsterTouch', require("./factory.touch.js"))
 	.factory('GridsterDraggable', require("./factory.draggable.js"))
 	.factory('GridsterResizable', require("./factory.resizable.js"))
-	.factory('gridsterDebounce', require("./factory.debounce.js"))
+	.factory('GridsterDebounce', require("./factory.debounce.js"))
 
 	;
 

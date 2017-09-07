@@ -21,14 +21,14 @@
 	 * @param {Function} $timeout
 	 * @param {Object} $window
 	 * @param {Object} $rootScope
-	 * @param {Function} gridsterDebounce
+	 * @param {Function} GridsterDebounce
 	 */
-	return ['$timeout', '$window', '$rootScope', 'gridsterDebounce',
-		function($timeout, $window, $rootScope, gridsterDebounce) {
+	return ['$timeout', '$window', '$rootScope', 'GridsterDebounce',
+		function($timeout, $window, $rootScope, GridsterDebounce) {
 			return {
 				scope: true,
 				restrict: 'EAC',
-				controller: 'GridsterCtrl',
+				controller: 'GridsterController',
 				controllerAs: 'gridster',
 				compile: function($tplElem) {
 
@@ -181,7 +181,7 @@
 						};
 
 						// track element width changes any way we can
-						var onResize = gridsterDebounce(function onResize() {
+						var onResize = GridsterDebounce(function onResize() {
 							resize();
 							$timeout(function() {
 								scope.$apply();

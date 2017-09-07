@@ -15,17 +15,17 @@
 }(this, function(angular) {
 	'use strict';
 
-	return ['gridsterConfig', '$timeout', function(gridsterConfig, $timeout) {
+	return ['GridsterConfig', '$timeout', function(GridsterConfig, $timeout) {
 
 			var gridster = this;
 
 			/**
-			 * Create options from gridsterConfig constant
+			 * Create options from GridsterConfig constant
 			 */
-			angular.extend(this, gridsterConfig);
+			angular.extend(this, GridsterConfig);
 
-			this.resizable = angular.extend({}, gridsterConfig.resizable || {});
-			this.draggable = angular.extend({}, gridsterConfig.draggable || {});
+			this.resizable = angular.extend({}, GridsterConfig.resizable || {});
+			this.draggable = angular.extend({}, GridsterConfig.draggable || {});
 
 			var flag = false;
 			this.layoutChanged = function() {
