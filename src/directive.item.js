@@ -53,7 +53,10 @@
 							minSizeX: 0,
 							minSizeY: 0,
 							maxSizeX: null,
-							maxSizeY: null
+							maxSizeY: null,
+							draggable: item.draggable,
+							resizable: item.resizable,
+							locked: item.locked
 						};
 						$optionsGetter.assign(scope, options);
 					}
@@ -65,7 +68,7 @@
 
 				$el.addClass('gridster-item');
 
-				var aspects = ['minSizeX', 'maxSizeX', 'minSizeY', 'maxSizeY', 'sizeX', 'sizeY', 'row', 'col'],
+				var aspects = ['locked', 'resizable', 'draggable', 'minSizeX', 'maxSizeX', 'minSizeY', 'maxSizeY', 'sizeX', 'sizeY', 'row', 'col'],
 					$getters = {};
 
 				var expressions = [];
@@ -88,7 +91,7 @@
 
 					// initial set
 					var val = $getters[aspect](scope);
-					if (typeof val === 'number') {
+					if(typeof val !== 'undefined') {
 						item[aspect] = val;
 					}
 				};
@@ -106,9 +109,16 @@
 						if (oldVal === newVal) {
 							continue;
 						}
-						newVal = parseInt(newVal, 10);
-						if (!isNaN(newVal)) {
+						if(
+							(typeof oldVal === typeof newVal)
+							|| (typeof oldVal === 'undefined' && typeof newVal === 'boolean')
+						) {
 							item[aspect] = newVal;
+						} else {
+							newVal = parseInt(newVal, 10);
+							if (!isNaN(newVal)) {
+								item[aspect] = newVal;
+							}
 						}
 					}
 				});
@@ -146,6 +156,7 @@
 					}
 				}
 
+
 				scope.$watch(function() {
 					return item.sizeY + ',' + item.sizeX + ',' + item.minSizeX + ',' + item.maxSizeX + ',' + item.minSizeY + ',' + item.maxSizeY;
 				}, sizeChanged);
@@ -154,12 +165,12 @@
 				var resizable = new GridsterResizable($el, scope, gridster, item, options);
 
 				var updateResizable = function() {
-					resizable.toggle(!gridster.isMobile && gridster.resizable && gridster.resizable.enabled);
+					resizable.toggle(!gridster.isMobile && gridster.resizable && gridster.resizable.enabled && item.resizable.enabled && !item.locked);
 				};
 				updateResizable();
 
 				var updateDraggable = function() {
-					draggable.toggle(!gridster.isMobile && gridster.draggable && gridster.draggable.enabled);
+					draggable.toggle(!gridster.isMobile && gridster.draggable && gridster.draggable.enabled && item.draggable.enabled && !item.locked);
 				};
 				updateDraggable();
 
@@ -167,6 +178,13 @@
 				scope.$on('gridster-resizable-changed', updateResizable);
 				scope.$on('gridster-resized', updateResizable);
 				scope.$on('gridster-mobile-changed', function() {
+					updateResizable();
+					updateDraggable();
+				});
+
+				scope.$watch(function() {
+					return item.locked;
+				}, function() {
 					updateResizable();
 					updateDraggable();
 				});

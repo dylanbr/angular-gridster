@@ -34,6 +34,24 @@
 			var originalCol, originalRow;
 			var inputTags = ['select', 'option', 'input', 'textarea', 'button'];
 
+			function allowDrag(col,row,itemsInTheWay) {
+				if(!itemsInTheWay) {
+					itemsInTheWay = [];
+				}
+				let lockedInTheWay = false;
+				angular.forEach(itemsInTheWay, function(itemInTheWay) {
+					if(itemInTheWay.locked) {
+						lockedInTheWay = true;
+					}
+				});
+				return (
+					!item.locked
+					&& !lockedInTheWay
+					&& (item.draggable.directions.indexOf("x") !== -1 || item.col == col)
+					&& (item.draggable.directions.indexOf("y") !== -1 || item.row == row)
+				);
+			}
+
 			function dragStart(event) {
 				$el.addClass('gridster-item-moving');
 				gridster.movingItem = item;
@@ -58,8 +76,9 @@
 
 				var itemsInTheWay = gridster.getItems(row, col, item.sizeX, item.sizeY, item);
 				var hasItemsInTheWay = itemsInTheWay.length !== 0;
+				var allowDragTo = allowDrag(col,row, itemsInTheWay);
 
-				if (gridster.swapping === true && hasItemsInTheWay) {
+				if (gridster.swapping === true && hasItemsInTheWay && allowDragTo) {
 					var boundingBoxItem = gridster.getBoundingBox(itemsInTheWay),
 						sameSize = boundingBoxItem.sizeX === item.sizeX && boundingBoxItem.sizeY === item.sizeY,
 						sameRow = boundingBoxItem.row === oldRow,
@@ -97,7 +116,13 @@
 					}
 				}
 
-				if (gridster.pushing !== false || !hasItemsInTheWay) {
+				if (
+					allowDragTo
+					&& (
+						gridster.pushing !== false
+						|| !hasItemsInTheWay
+					)
+				) {
 					item.row = row;
 					item.col = col;
 				}
@@ -127,7 +152,13 @@
 				$el.removeClass('gridster-item-moving');
 				var row = Math.min(gridster.pixelsToRows(elmY), gridster.maxRows - 1);
 				var col = Math.min(gridster.pixelsToColumns(elmX), gridster.columns - 1);
-				if (gridster.pushing !== false || gridster.getItems(row, col, item.sizeX, item.sizeY, item).length === 0) {
+				var itemsInTheWay = gridster.getItems(row, col, item.sizeX, item.sizeY, item);
+				if (
+					allowDrag(col,row,itemsInTheWay) && (
+						gridster.pushing !== false
+						|| itemsInTheWay.length === 0
+					)
+				) {
 					item.row = row;
 					item.col = col;
 				}

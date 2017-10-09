@@ -26,12 +26,17 @@
 		this.minSizeY = 0;
 		this.maxSizeX = null;
 		this.maxSizeY = null;
+		this.draggable = null;
+		this.resizable = null;
+		this.locked = false;
 
 		this.init = function($element, gridster) {
 			this.$element = $element;
 			this.gridster = gridster;
 			this.sizeX = gridster.defaultSizeX;
 			this.sizeY = gridster.defaultSizeY;
+			this.resizable = gridster.resizable;
+			this.draggable = gridster.draggable;
 		};
 
 		this.destroy = function() {
